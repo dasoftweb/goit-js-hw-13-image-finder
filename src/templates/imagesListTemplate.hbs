@@ -1,0 +1,40 @@
+{{!-- {{#each this}}
+<li class="gallery__item">
+    <img class="gallery__img" src="{{this.webformatURL}}" alt="{{this.tags}}">
+    <div class="images-overlay">
+        <ul class="images-overlay__attributes-list">
+            <li>Likes: {{this.likes}}</li>
+            <li>Views: {{this.views}}</li>
+            <li>Comments: {{this.comments}}</li>
+            <li>Downloads: {{this.downloads}}</li>
+        </ul>
+    </div>
+</li>
+{{/each}} --}}
+
+{{#each this}}
+<li class="gallery__item">
+    <div class="photo-card">
+        <img src="{{this.webformatURL}}" alt="{{this.tags}}" />
+
+        <div class="stats">
+            <p class="stats-item">
+                <i class="material-icons">thumb_up</i>
+                {{this.likes}}
+            </p>
+            <p class="stats-item">
+                <i class="material-icons">visibility</i>
+                {{this.views}}
+            </p>
+            <p class="stats-item">
+                <i class="material-icons">comment</i>
+                {{this.comments}}
+            </p>
+            <p class="stats-item">
+                <i class="material-icons">cloud_download</i>
+                {{this.downloads}}
+            </p>
+        </div>
+    </div>
+</li>
+{{/each}}
