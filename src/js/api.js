@@ -12,6 +12,7 @@ class ImagesApi {
     this.#images = [];
     this.query = '';
     this.per_page = 12;
+    this.loadMore = this.loadMore.bind(this);
   }
 
   get images() {
