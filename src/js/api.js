@@ -6,7 +6,13 @@ const { BASE_URL, API_KEY } = setting;
 class ImagesApi {
   #images = [];
   constructor(selector) {
-    this.element = document.querySelector(selector);
+    this.galleryRef = document.querySelector(selector);
+    this.lightboxRef = document.querySelector('.js-lightbox');
+    this.lightboxImageRef = document.querySelector('.lightbox__image');
+    this.lightboxOverlayRef = document.querySelector('.lightbox__overlay');
+    this.lightboxCloseRef = document.querySelector(
+      'button[data-action="close-lightbox"]',
+    );
     this.currentPage = 1;
     this.totalPages = 0;
     this.#images = [];
@@ -22,14 +28,55 @@ class ImagesApi {
   set images(imagesList) {
     this.#images = imagesList;
     this.renderImages();
+    // render lightbox stuff
+    this.galleryRef.addEventListener('click', this.onGalleryClick.bind(this));
+    this.lightboxOverlayRef.addEventListener(
+      'click',
+      this.closeModal.bind(this),
+    );
+    this.lightboxCloseRef.addEventListener('click', this.closeModal.bind(this));
+  }
+
+  onGalleryClick(event) {
+    event.preventDefault();
+    if (event.target.nodeName !== 'IMG') {
+      return;
+    }
+    console.log('Click on gallery');
+    const imageRef = event.target;
+    const largeImageURL = imageRef.dataset.source;
+    const largeImageALT = imageRef.alt;
+    console.log(largeImageURL);
+    this.setLightboxImage(largeImageURL, largeImageALT);
+    this.openModal();
+  }
+
+  openModal() {
+    this.lightboxRef.classList.add('is-open');
+  }
+
+  closeModal() {
+    this.lightboxRef.classList.remove('is-open');
+    this.removeLightboxImage();
+  }
+
+  setLightboxImage(url, alt) {
+    this.lightboxImageRef.src = url;
+    this.lightboxImageRef.alt = alt;
+  }
+
+  removeLightboxImage() {
+    this.lightboxImageRef.src = '';
+    this.lightboxImageRef.alt = '';
   }
 
   search(query) {
     if (!query) {
-      return;
+      return; //no query
     }
 
     if (this.query != query) {
+      //new quert = reset contants
       this.query = query;
       this.currentPage = 1;
       this.totalPages = 0;
@@ -63,6 +110,7 @@ class ImagesApi {
   }
 
   addImages(newImages) {
+    // add new images to old images
     this.images = [...this.images, ...newImages];
   }
 
@@ -74,7 +122,7 @@ class ImagesApi {
   }
 
   renderImages() {
-    this.element.innerHTML = imagesListTemplate(this.images);
+    this.galleryRef.innerHTML = imagesListTemplate(this.images);
   }
 }
 

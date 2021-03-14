@@ -1,21 +1,7 @@
-{{!-- {{#each this}}
-<li class="gallery__item">
-    <img class="gallery__img" src="{{this.webformatURL}}" alt="{{this.tags}}">
-    <div class="images-overlay">
-        <ul class="images-overlay__attributes-list">
-            <li>Likes: {{this.likes}}</li>
-            <li>Views: {{this.views}}</li>
-            <li>Comments: {{this.comments}}</li>
-            <li>Downloads: {{this.downloads}}</li>
-        </ul>
-    </div>
-</li>
-{{/each}} --}}
-
 {{#each this}}
 <li class="gallery__item">
     <div class="photo-card">
-        <img src="{{this.webformatURL}}" alt="{{this.tags}}" />
+        <img src="{{this.webformatURL}}" data-source="{{this.largeImageURL}}" alt="{{this.tags}}" />
 
         <div class="stats">
             <p class="stats-item">
