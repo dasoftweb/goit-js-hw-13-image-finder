@@ -4,7 +4,6 @@ import imagesListTemplate from '../templates/imagesListTemplate.hbs';
 const { BASE_URL, API_KEY } = setting;
 
 class ImagesApi {
-  #images = [];
   constructor(selector) {
     this.galleryRef = document.querySelector(selector);
     this.lightboxRef = document.querySelector('.js-lightbox');
@@ -13,28 +12,12 @@ class ImagesApi {
     this.lightboxCloseRef = document.querySelector(
       'button[data-action="close-lightbox"]',
     );
+    this.moreButtonRef = document.querySelector('.more');
     this.currentPage = 1;
     this.totalPages = 0;
-    this.#images = [];
     this.query = '';
     this.per_page = 12;
     this.loadMore = this.loadMore.bind(this);
-  }
-
-  get images() {
-    return this.#images;
-  }
-
-  set images(imagesList) {
-    this.#images = imagesList;
-    this.renderImages();
-    // render lightbox stuff
-    this.galleryRef.addEventListener('click', this.onGalleryClick.bind(this));
-    this.lightboxOverlayRef.addEventListener(
-      'click',
-      this.closeModal.bind(this),
-    );
-    this.lightboxCloseRef.addEventListener('click', this.closeModal.bind(this));
   }
 
   onGalleryClick(event) {
@@ -85,11 +68,20 @@ class ImagesApi {
     console.log(`Load Page: ${this.currentPage}`);
 
     this.fetchImages(query, this.currentPage).then(results => {
-      this.images = results.hits;
+      this.renderImages(results.hits);
       this.totalPages = results.totalHits / this.per_page;
-      //   console.log(results);
-      //   console.log(this.totalPages);
+      if (results.totalHits / this.per_page > this.currentPage) {
+        this.renderLoadMoreButton() 
+      }
+      // console.log(results.hits);
     });
+    // render lightbox stuff
+    this.galleryRef.addEventListener('click', this.onGalleryClick.bind(this));
+    this.lightboxOverlayRef.addEventListener(
+      'click',
+      this.closeModal.bind(this),
+    );
+    this.lightboxCloseRef.addEventListener('click', this.closeModal.bind(this));
   }
 
   loadMore() {
@@ -105,13 +97,15 @@ class ImagesApi {
     console.log(`Load Page: ${this.currentPage}`);
 
     this.fetchImages(this.query, this.currentPage).then(results => {
-      this.addImages(results.hits);
+      this.renderImages(results.hits);
     });
   }
 
-  addImages(newImages) {
-    // add new images to old images
-    this.images = [...this.images, ...newImages];
+  renderLoadMoreButton() {
+      this.moreButtonRef.innerHTML =
+        '<button id="load-more" class="load-more">LOAD MORE</button>';
+        const loadMoreBtnRef = document.querySelector('#load-more');
+        loadMoreBtnRef.addEventListener('click', this.loadMore);
   }
 
   async fetchImages(searchQuery, page) {
@@ -121,8 +115,8 @@ class ImagesApi {
     return images;
   }
 
-  renderImages() {
-    this.galleryRef.innerHTML = imagesListTemplate(this.images);
+  renderImages(images) {
+    this.galleryRef.insertAdjacentHTML('beforeend', imagesListTemplate(images));
   }
 }
 
