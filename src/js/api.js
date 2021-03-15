@@ -63,6 +63,7 @@ class ImagesApi {
       this.query = query;
       this.currentPage = 1;
       this.totalPages = 0;
+      this.galleryRef.innerHTML = '';
     }
     console.log(`NEW QUERY`);
     console.log(`Load Page: ${this.currentPage}`);
@@ -99,7 +100,7 @@ class ImagesApi {
     this.fetchImages(this.query, this.currentPage).then(results => {
       this.renderImages(results.hits);
     });
-    this.scrollAfterRender()
+    this.scrollAfterRender();
   }
 
   renderLoadMoreButton() {
@@ -122,7 +123,7 @@ class ImagesApi {
 
   scrollAfterRender() {
     window.scrollTo({
-      top: window.scrollY+window.innerHeight,
+      top: window.scrollY + window.screen.height,
       behavior: 'smooth',
     });
   }
