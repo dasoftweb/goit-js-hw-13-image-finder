@@ -23,4 +23,4 @@ const observer = new IntersectionObserver(observerHandler);
 
 observer.observe(observerRef);
 
-imagesSearch.search('kiev') // hardcoded search test
+// imagesSearch.search('kiev') // hardcoded search test

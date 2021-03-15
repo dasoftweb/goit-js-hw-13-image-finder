@@ -71,7 +71,7 @@ class ImagesApi {
       this.renderImages(results.hits);
       this.totalPages = results.totalHits / this.per_page;
       if (results.totalHits / this.per_page > this.currentPage) {
-        this.renderLoadMoreButton() 
+        this.renderLoadMoreButton();
       }
       // console.log(results.hits);
     });
@@ -102,10 +102,10 @@ class ImagesApi {
   }
 
   renderLoadMoreButton() {
-      this.moreButtonRef.innerHTML =
-        '<button id="load-more" class="load-more">LOAD MORE</button>';
-        const loadMoreBtnRef = document.querySelector('#load-more');
-        loadMoreBtnRef.addEventListener('click', this.loadMore);
+    this.moreButtonRef.innerHTML =
+      '<button id="load-more" class="load-more">LOAD MORE</button>';
+    const loadMoreBtnRef = document.querySelector('#load-more');
+    loadMoreBtnRef.addEventListener('click', this.loadMore);
   }
 
   async fetchImages(searchQuery, page) {
@@ -117,6 +117,14 @@ class ImagesApi {
 
   renderImages(images) {
     this.galleryRef.insertAdjacentHTML('beforeend', imagesListTemplate(images));
+    this.scrollAfterRender()
+  }
+
+  scrollAfterRender() {
+    window.scrollTo({
+      top: window.scrollY+window.innerHeight,
+      behavior: 'smooth',
+    });
   }
 }
 
