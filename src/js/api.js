@@ -99,6 +99,7 @@ class ImagesApi {
     this.fetchImages(this.query, this.currentPage).then(results => {
       this.renderImages(results.hits);
     });
+    this.scrollAfterRender()
   }
 
   renderLoadMoreButton() {
@@ -117,7 +118,6 @@ class ImagesApi {
 
   renderImages(images) {
     this.galleryRef.insertAdjacentHTML('beforeend', imagesListTemplate(images));
-    this.scrollAfterRender()
   }
 
   scrollAfterRender() {
